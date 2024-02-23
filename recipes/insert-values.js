@@ -1,4 +1,6 @@
-var mysql      = require('mysql');
+const util = require('util');
+const mysql = require('mysql');
+
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'hyfuser',
@@ -6,8 +8,8 @@ var connection = mysql.createConnection({
   database : 'recipes'
 });
 
-connection.connect();
-var insert_options = {
+
+let insert_options = {
     recipes: [
         "No-Bake Cheesecake",
         "Roasted Brussels Sprouts",
@@ -22,7 +24,7 @@ var insert_options = {
         "Gluten-Free",
         "Japanese"
     ],
-    ingredient: [
+    ingredients: [
         "Condensed milk",
         "Cream Cheese",
         "Lemon Juice",
@@ -72,6 +74,30 @@ var insert_options = {
         "Remove pan from fire"
     ]
 }
+connection.connect(err => {
+    if (err) throw err;
+    console.log('Connected to MySQL server.');
+    insertIntoTables();
+  });
+  async function insertIntoTables() {
+    const execQuery = util.promisify(connection.query.bind(connection));
+    try {      
+        await Promise.all(insert_options.recipes.map(async recipe => {
+            await execQuery(`INSERT INTO Recipes (recipe_name) VALUES (?)`, [recipe]);
+        }));
+        await Promise.all(insert_options.categories.map(async category => {
+            await execQuery(`INSERT INTO Categories (category_name) VALUES (?)`, [category]);
+        }));
+        await Promise.all(insert_options.ingredients.map(async ingredient => {
+            await execQuery(`INSERT INTO Ingredients (ingredient_name) VALUES (?)`, [ingredient]);
+        }));
+        await Promise.all(insert_options.steps.map(async instruction => {
+            await execQuery(`INSERT INTO Steps (instruction) VALUES (?)`, [instruction]);
+        }));
+    } catch (error) {
+        console.error(error);
+    }
+    connection.end();
+}
 
 
-connection.end();
