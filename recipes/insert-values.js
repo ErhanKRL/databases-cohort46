@@ -7,14 +7,14 @@ var connection = mysql.createConnection({
 });
 
 connection.connect();
-var insert_queries = {
-    name: [
+var insert_options = {
+    recipes: [
         "No-Bake Cheesecake",
         "Roasted Brussels Sprouts",
         "Mac & Cheese",
         "Tamagoyaki Japanese Omelette"
     ],
-    category: [
+    categories: [
         "Cake",
         "No-Bake",
         "Vegetarian",
@@ -45,7 +45,7 @@ var insert_queries = {
         "Sugar",
         "Olive Oil"
     ],
-    step: [
+    steps: [
         "Beat Cream Cheese",
         "Add condensed Milk and blend",
         "Add Lemon Juice and blend",
@@ -73,13 +73,5 @@ var insert_queries = {
     ]
 }
 
-for(var i in insert_queries){
-    console.log("Going to run ", insert_queries[i]) // [] subscript operator : Of 
-    connection.query(insert_queries[i], function (error, results, fields) {
-        if (error) {
-            throw error;
-        }
-        console.log("the reply is ", results[0]);
-    });
-}
+
 connection.end();
