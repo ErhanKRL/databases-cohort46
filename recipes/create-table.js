@@ -1,39 +1,54 @@
+const util = require('util');
 const mysql = require('mysql');
 
-let connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'hyfuser',
-    password : 'hyfpassword',
-    database : 'recipes',
-    // port : 3307
-  });
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'hyfuser',
+  password: 'hyfpassword',
+  database: 'recipes',
+});
 
-  connection.connect((err) => {
-    if (err) {
-      console.error('Error connecting to MySQL server: ' + err.stack);
-      return;
-    }
+connection.connect(err => {
+  if (err) throw err;
+  console.log('Connected to MySQL server.');
+  createDatabase();
+});
+
+function createDatabase() {
+  connection.query('DROP DATABASE IF EXISTS recipes', (err) => {
+    if (err) throw err;
+    console.log('Database dropped (if existed).');
+    connection.query('CREATE DATABASE recipes', (err) => {
+      if (err) throw err;
+      console.log('Database created.');
+      connection.query('USE recipes', (err) => {
+          if (err) throw err;
+          console.log('Database selected.');
+          createTables();
+      });
+    });
   });
+}
 
   const queries = {
     createTables: [
-      "CREATE TABLE Recipes (recipe_id INT PRIMARY KEY, recipe_name VARCHAR(255) NOT NULL)",
-      "CREATE TABLE Ingredients (ingredient_id INT PRIMARY KEY, ingredient_name VARCHAR(255) NOT NULL)",
-      "CREATE TABLE Steps (step_id INT PRIMARY KEY, instruction TEXT NOT NULL)",
-      "CREATE TABLE Categories (category_id INT PRIMARY KEY, category_name VARCHAR(255) NOT NULL)",
-      "CREATE TABLE RecipeSteps (recipe_id INT, step_id INT, step_number INT, PRIMARY KEY (recipe_id, step_id), FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id), FOREIGN KEY (step_id) REFERENCES Steps(step_id))",
-      "CREATE TABLE RecipeCategories (recipe_id INT, category_id INT, PRIMARY KEY (recipe_id, category_id), FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id), FOREIGN KEY (category_id) REFERENCES Categories(category_id))",
-      "CREATE TABLE RecipeIngredients (recipe_id INT, ingredient_id INT, PRIMARY KEY (recipe_id, ingredient_id), FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id), FOREIGN KEY (ingredient_id) REFERENCES Ingredients(ingredient_id))"
+      "CREATE TABLE IF NOT EXISTS Recipes (recipe_id INT PRIMARY KEY, recipe_name VARCHAR(255) NOT NULL)",
+      "CREATE TABLE IF NOT EXISTS Ingredients (ingredient_id INT PRIMARY KEY, ingredient_name VARCHAR(255) NOT NULL)",
+      "CREATE TABLE IF NOT EXISTS Steps (step_id INT PRIMARY KEY, instruction TEXT NOT NULL)",
+      "CREATE TABLE IF NOT EXISTS Categories (category_id INT PRIMARY KEY, category_name VARCHAR(255) NOT NULL)",
+      "CREATE TABLE IF NOT EXISTS RecipeSteps (recipe_id INT, step_id INT, step_number INT, PRIMARY KEY (recipe_id, step_id), FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id), FOREIGN KEY (step_id) REFERENCES Steps(step_id))",
+      "CREATE TABLE IF NOT EXISTS RecipeCategories (recipe_id INT, category_id INT, PRIMARY KEY (recipe_id, category_id), FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id), FOREIGN KEY (category_id) REFERENCES Categories(category_id))",
+      "CREATE TABLE IF NOT EXISTS RecipeIngredients (recipe_id INT, ingredient_id INT, PRIMARY KEY (recipe_id, ingredient_id), FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id), FOREIGN KEY (ingredient_id) REFERENCES Ingredients(ingredient_id))"
     ]
   };
 
-  queries.createTables.forEach(query => {
-    connection.query(query, function (error, results, fields) {
-      if (error) {
-        throw error;
-      }
-      console.log("the reply is ", results[0]);
-    });
-  });
+  async function createTables() {
   
-connection.end();
+    const execQuery = util.promisify(connection.query.bind(connection));
+    try {
+      await Promise.all[queries.createTables.forEach(query => execQuery(query))];   
+    } catch (error) {
+      console.error(error);
+    }
+    connection.end();
+  }
