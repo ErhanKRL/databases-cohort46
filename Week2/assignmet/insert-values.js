@@ -27,7 +27,7 @@ connection.connect(err => {
             execQuery('INSERT INTO Author_Paper SET ?', authorPaper);
         }));
         await Promise.all(insert_options.mentors.map(async mentor => {
-            await execQuery(`INSERT INTO Authors (mentor) VALUES (?)`, [mentor]);
+            await execQuery(`UPDATE Authors SET mentor = ? WHERE author_id = ?`, [mentor.mentor, mentor.author_id]);
         }));
     } catch (error) {
         console.error(error);

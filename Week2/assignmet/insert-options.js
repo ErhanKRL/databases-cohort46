@@ -1,13 +1,12 @@
 const insert_options = {
-    authors:[
-        {
+        authors: [
+          {
             author_id: 1,
             author_name: 'John Doe',
             university: 'University of Michigan',
             date_of_birth: '1980-01-01',
             h_index: 100,
-            gender: 'M',
-            mentor: 15
+            gender: 'M'
           },
           {
             author_id: 2,
@@ -15,8 +14,7 @@ const insert_options = {
             university: 'Stanford University',
             date_of_birth: '1985-03-15',
             h_index: 95,
-            gender: 'F',
-            mentor: 1
+            gender: 'F'
           },
           {
             author_id: 3,
@@ -24,8 +22,7 @@ const insert_options = {
             university: 'Harvard University',
             date_of_birth: '1982-05-20',
             h_index: 90,
-            gender: 'M',
-            mentor: 1
+            gender: 'M'
           },
           {
             author_id: 4,
@@ -33,8 +30,7 @@ const insert_options = {
             university: 'Massachusetts Institute of Technology',
             date_of_birth: '1988-07-10',
             h_index: 85,
-            gender: 'F',
-            mentor: 2
+            gender: 'F'
           },
           {
             author_id: 5,
@@ -42,8 +38,7 @@ const insert_options = {
             university: 'Massachusetts Institute of Technology',
             date_of_birth: '1983-09-25',
             h_index: 80,
-            gender: 'M',
-            mentor: 3
+            gender: 'M'
           },
           {
             author_id: 6,
@@ -51,8 +46,7 @@ const insert_options = {
             university: 'Harvard University',
             date_of_birth: '1987-11-12',
             h_index: 85,
-            gender: 'F',
-            mentor: 4
+            gender: 'F'
           },
           {
             author_id: 7,
@@ -60,8 +54,7 @@ const insert_options = {
             university: 'Stanford University',
             date_of_birth: '1984-04-08',
             h_index: 75,
-            gender: 'M',
-            mentor: 2
+            gender: 'M'
           },
           {
             author_id: 8,
@@ -69,8 +62,7 @@ const insert_options = {
             university: 'Stanford University',
             date_of_birth: '1986-06-30',
             h_index: 80,
-            gender: 'F',
-            mentor: 5
+            gender: 'F'
           },
           {
             author_id: 9,
@@ -78,8 +70,7 @@ const insert_options = {
             university: 'University of Oxford',
             date_of_birth: '1981-10-17',
             h_index: 70,
-            gender: 'M',
-            mentor: 6
+            gender: 'M'
           },
           {
             author_id: 10,
@@ -87,8 +78,7 @@ const insert_options = {
             university: 'Princeton University',
             date_of_birth: '1989-12-05',
             h_index: 75,
-            gender: 'F',
-            mentor: 7
+            gender: 'F'
           },
           {
             author_id: 11,
@@ -96,8 +86,7 @@ const insert_options = {
             university: 'Yale University',
             date_of_birth: '1980-02-14',
             h_index: 65,
-            gender: 'M',
-            mentor: 8
+            gender: 'M'
           },
           {
             author_id: 12,
@@ -105,8 +94,7 @@ const insert_options = {
             university: 'Princeton University',
             date_of_birth: '1984-08-20',
             h_index: 70,
-            gender: 'F',
-            mentor: 9
+            gender: 'F'
           },
           {
             author_id: 13,
@@ -114,8 +102,7 @@ const insert_options = {
             university: 'University of Toronto',
             date_of_birth: '1983-03-10',
             h_index: 60,
-            gender: 'M',
-            mentor: 10
+            gender: 'M'
           },
           {
             author_id: 14,
@@ -123,8 +110,7 @@ const insert_options = {
             university: 'Cornell University',
             date_of_birth: '1987-05-22',
             h_index: 65,
-            gender: 'F',
-            mentor: 11
+            gender: 'F'
           },
           {
             author_id: 15,
@@ -132,10 +118,26 @@ const insert_options = {
             university: 'Cornell University',
             date_of_birth: '1982-09-28',
             h_index: 55,
-            gender: 'M',
-            mentor: 12
+            gender: 'M'
           }
-      ],
+        ],
+        mentors: [
+            { author_id: 1, mentor: 15 },
+            { author_id: 2, mentor: 1 },
+            { author_id: 3, mentor: 1 },
+            { author_id: 4, mentor: 2 },
+            { author_id: 5, mentor: 3 },
+            { author_id: 6, mentor: 4 },
+            { author_id: 7, mentor: 2 },
+            { author_id: 8, mentor: 5 },
+            { author_id: 9, mentor: 6 },
+            { author_id: 10, mentor: 7 },
+            { author_id: 11, mentor: 8 },
+            { author_id: 12, mentor: 9 },
+            { author_id: 13, mentor: 10 },
+            { author_id: 14, mentor: 11 },
+            { author_id: 15, mentor: 12 }
+        ],
       researchPapers:[
         {
           paper_id: 1,
