@@ -6,7 +6,7 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'hyfuser',
   password : 'hyfpassword',
-  database : 'recipes'
+  database : 'publications'
 });
 
 connection.connect(err => {
@@ -17,31 +17,25 @@ connection.connect(err => {
   async function insertIntoTables() {
     const execQuery = util.promisify(connection.query.bind(connection));
     try {      
-        await Promise.all(insert_options.recipes.map(async recipe => {
-            await execQuery(`INSERT INTO Recipes (recipe_name) VALUES (?)`, [recipe]);
+        await Promise.all(insert_options.authors.map(async author => {
+            await execQuery(`INSERT INTO Authors SET ?`, author);
         }));
-        await Promise.all(insert_options.categories.map(async category => {
-            await execQuery(`INSERT INTO Categories (category_name) VALUES (?)`, [category]);
+        await Promise.all(insert_options.researchPapers.map(paper =>{
+            execQuery('INSERT INTO Research_Papers SET ?', paper);
         }));
-        await Promise.all(insert_options.ingredients.map(async ingredient => {
-            await execQuery(`INSERT INTO Ingredients (ingredient_name) VALUES (?)`, [ingredient]);
+        await Promise.all(insert_options.authorsPapers.map(authorPaper =>{
+            execQuery('INSERT INTO Author_Paper SET ?', authorPaper);
         }));
-        await Promise.all(insert_options.steps.map(async instruction => {
-            await execQuery(`INSERT INTO Steps (instruction) VALUES (?)`, [instruction]);
-        }));
-        await Promise.all(insert_options.recipe_categories.map(category =>{
-            execQuery('INSERT INTO RecipeCategories SET ?', category);
-        }));
-        await Promise.all(insert_options.recipe_ingredients.map(ingredient =>{
-            execQuery('INSERT INTO RecipeIngredients SET ?', ingredient);
-        }));
-        await Promise.all(insert_options.recipe_steps.map(step =>{
-            execQuery('INSERT INTO RecipeSteps SET ?', step);
+        await Promise.all(insert_options.mentors.map(async mentor => {
+            await execQuery(`INSERT INTO Authors (mentor) VALUES (?)`, [mentor]);
         }));
     } catch (error) {
         console.error(error);
     }
     connection.end();
 }
+
+
+
 
 

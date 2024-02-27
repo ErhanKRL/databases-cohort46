@@ -318,7 +318,7 @@ const insert_options = {
           publish_date: '2024-12-15'
         }
       ],
-      authors_papers: [
+      authorsPapers: [
         { author_id: 1, paper_id: 1 },
         { author_id: 3, paper_id: 1 },
         { author_id: 5, paper_id: 1 },
