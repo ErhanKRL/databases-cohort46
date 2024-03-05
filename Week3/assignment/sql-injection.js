@@ -10,7 +10,14 @@ const conn = mysql.createConnection({
 conn.connect(err => {
     if (err) throw err;
     console.log('Connected to MySQL server.');
-    getPopulation('country', 'Netherlands', 'NLD', (err, population) =>{
+    vulnerableGetPopulation('country', "' OR 1=1 --", "' OR 1=1 --", (err, population) =>{
+        if (err) {
+            console.error(err);
+          } else {
+            console.log('Population:', population);
+          }
+    });
+    getPopulation('country', "' OR 1=1 --", "' OR 1=1 --", (err, population) =>{
         if (err) {
             console.error(err);
           } else {
@@ -19,8 +26,7 @@ conn.connect(err => {
     });
   });
 
-  function getPopulation(Country, name, code, cb) {
-    // assuming that connection to the database is established and stored as conn
+  function vulnerableGetPopulation(Country, name, code, cb) {
     conn.query(
       `SELECT Population FROM ${Country} WHERE Name = '${name}' and code = '${code}'`,
       function (err, result) {
@@ -29,8 +35,31 @@ conn.connect(err => {
         cb(null, result);
       }
     );
-    conn.end();
-  }
+  };
+
+  function getPopulation(Country, name, code, cb) {
+    conn.query(
+        `SELECT Population FROM ${Country} WHERE Name = ? AND code = ?`,
+        [name, code],
+        function (err, result) {
+            if (err) {
+                cb(err);
+            } else {
+                if (result.length == 0) {
+                    cb(new Error("Not found"));
+                } else {
+                    cb(null, result);
+                }
+            }
+        }
+    );
+    conn.end(); 
+}
+
+//Instead of directly inserting values into the SQL query string, we used placeholders "?" for parameters.
+//When we invoke the second function, it should give Error: Not found 
+
+
 
 
 
