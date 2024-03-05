@@ -23,7 +23,6 @@ conn.connect(err => {
     // assuming that connection to the database is established and stored as conn
     conn.query(
       `SELECT Population FROM ${Country} WHERE Name = '${name}' and code = '${code}'`,
-      //`SELECT Population FROM ${Country} WHERE Name = '${name}' and code = '${code}' or '1'='1' --`, // SQL injected code.
       function (err, result) {
         if (err) cb(err);
         if (result.length == 0) cb(new Error("Not found"));
