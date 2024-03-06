@@ -35,24 +35,36 @@ async function createTables() {
 
   const CREATE_INVITEE_TABLE = `
     CREATE TABLE IF NOT EXISTS invitee (
-      invitee_no INT,
+      invitee_no INT PRIMARY KEY,
       invitee_name VARCHAR(50),
       invited_by VARCHAR(50)
     );`;
   const CREATE_ROOM_TABLE = `
     CREATE TABLE IF NOT EXISTS room (
-      room_no INT,
+      room_no INT PRIMARY KEY,
       room_name VARCHAR(50),
       floor_number VARCHAR(50)
     );`;
   const CREATE_MEETING_TABLE = `
     CREATE TABLE IF NOT EXISTS meeting (
-      meeting_no INT,
+      meeting_no INT PRIMARY KEY,
       meeting_title VARCHAR(50),
       starting_time TIMESTAMP,
       ending_time TIMESTAMP,
-      room_no INT
+      room_no INT,
+      FOREIGN KEY(room_no) REFERENCES room(room_no)
     );`;
+  const CREATE_MEETING_INVITEE_TABLE = `
+    CREATE TABLE meeting_invitee (
+      meeting_no INT,
+      invitee_no INT,
+      FOREIGN KEY (meeting_no) REFERENCES meeting(meeting_no),
+      FOREIGN KEY (invitee_no) REFERENCES invitee (invitee_no)
+  );
+  `
+  const INSERT_INVITEE_SET = 'INSERT INTO invitee SET ?'
+  const INSERT_ROOM_SET = 'INSERT INTO room SET ?';
+  const INSERT_MEETING_SET = 'INSERT INTO meeting SET ?';
 
     const invitees = [
         {
@@ -153,17 +165,19 @@ async function createTables() {
   const execQuery = util.promisify(connection.query.bind(connection));
   try {
 
-    await Promise.all[execQuery(CREATE_INVITEE_TABLE), execQuery(CREATE_ROOM_TABLE), execQuery(CREATE_MEETING_TABLE)];
+    await Promise.all[execQuery(CREATE_INVITEE_TABLE), execQuery(CREATE_ROOM_TABLE), execQuery(CREATE_MEETING_TABLE), execQuery(CREATE_MEETING_INVITEE_TABLE)];
     
-    await Promise.all(invitees.map(invitee =>{
-      execQuery('INSERT INTO invitee SET ?', invitee)
-  }));
-    await Promise.all(rooms.map(room =>{
-      execQuery('INSERT INTO room SET ?', room)
-  }));
-    await Promise.all(meetings.map(meeting =>{
-      execQuery('INSERT INTO meeting SET ?', meeting)
-  }));
+    await Promise.all(
+      invitees.map(invitee =>{
+      execQuery(INSERT_INVITEE_SET, invitee)
+    }),
+      rooms.map(room =>{
+      execQuery(INSERT_ROOM_SET, room)
+    }),
+    meetings.map(meeting =>{
+      execQuery(INSERT_MEETING_SET, meeting)
+    })
+    );
   } catch (error) {
     console.error(error);
   }
