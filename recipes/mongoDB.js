@@ -1,6 +1,7 @@
 const { MongoClient } = require('mongodb');
+require('dotenv').config();
 
-const uri = "mongodb+srv://erhan16k:erhan.16k@cluster0.hnvkl5k.mongodb.net/"
+const uri = process.env.MONGODB_URI
 
 const dbName = 'recipes';
 
