@@ -1,0 +1,12 @@
+If two collections already need to share the data we should go for the normalised approach.
+
+Normalising data allows for faster writes as your documents will be smaller.
+Normalising data allows for easier growth of your data structure as it is easier to expand a collection that is not as complex.
+Here we chose keeping Categories, Steps and Ingredients data in normalised collection because they are likely to grow. Much more ingredients steps and categories would be added.
+
+Embedding is good if the subdocument is small and is always only linked to that object.
+So looking over our example we would say that our recipe information should probably be embedded. It is small, will probably not grow a lot in size and is closely linked to the categories, ingredients and steps.
+For the many-to-many relationships between recipes and categories/ingredients/steps, denormalization was chosen. , the Category, ingredient and steps data are embedded directly into the recipe document. This simplifies querying and reduces the need for complex join operations.
+Recipes typically have a limited number of categories, steps and ingredients, making embedding feasible without causing excessive document size.
+
+I would chose MongoDB because the data structure is not highly relational and requires complex transactions or integrity constraints.
