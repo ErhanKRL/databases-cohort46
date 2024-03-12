@@ -1,7 +1,8 @@
 const { MongoClient } = require('mongodb');
 const fs = require('fs');
 const csv = require('csv-parser');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const uri = process.env.MONGODB_URI;
 const dbName = 'databaseWeek4';
