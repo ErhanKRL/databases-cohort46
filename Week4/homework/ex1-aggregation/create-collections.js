@@ -37,7 +37,6 @@ async function insertPopulationData(db, fileName) {
     const collectionName = 'countries';
     const collection = db.collection(collectionName);
     const data = [];
-
     return new Promise((resolve, reject) => {
         fs.createReadStream(fileName)
             .pipe(csv())

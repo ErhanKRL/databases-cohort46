@@ -11,20 +11,13 @@ async function createAccounts() {
     try {
         await client.connect();
         console.log('Connected to MongoDB');
-
         const db = client.db(dbName);
-
-        // Drop collection if it exists
         await dropCollectionIfExists(db, 'accounts');
-
-        // Create accounts collection and insert data
         await createAndInsertAccounts(db);
-
         console.log('Data insertion complete');
     } catch (err) {
         console.error('Error:', err);
     } finally {
-        // Disconnect from MongoDB after all operations are completed
         await client.close();
         console.log('Disconnected from MongoDB');
     }
@@ -39,10 +32,7 @@ async function dropCollectionIfExists(db, collectionName) {
 }
 
 async function createAndInsertAccounts(db) {
-    // Create accounts collection
     const accountsCollection = db.collection('accounts');
-
-    // Sample account data
     const accountsData = [
         {
             account_number: 101,
@@ -59,9 +49,7 @@ async function createAndInsertAccounts(db) {
             ]
         }
     ];
-
-    // Insert sample data into accounts collection
     await accountsCollection.insertMany(accountsData);
 }
 
-createAccounts();
+module.exports = createAccounts;

@@ -11,10 +11,8 @@ async function getTotalPopulationByYear(countryName) {
     try {
         await client.connect();
         console.log('Connected to MongoDB');
-
         const db = client.db(dbName);
         const collection = db.collection('countries');
-
         const pipeline = [
             {
                 $match: { Country: countryName }

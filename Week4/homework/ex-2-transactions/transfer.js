@@ -1,4 +1,3 @@
-// transfer.js
 const { MongoClient, ObjectId } = require('mongodb');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -12,22 +11,18 @@ async function transferMoney(fromAccountNumber, toAccountNumber, amount) {
     try {
         await client.connect();
         console.log('Connected to MongoDB');
-
         const db = client.db(dbName);
         const accountsCollection = db.collection('accounts');
         const sourceAccount = await accountsCollection.findOne({ account_number: fromAccountNumber });
         const destinationAccount = await accountsCollection.findOne({ account_number: toAccountNumber });
-
         if (!sourceAccount || !destinationAccount) {
             throw new Error('Source or destination account not found.');
         }
         if (sourceAccount.balance < amount) {
             throw new Error('Insufficient balance in the source account.');
         }
-
         const newSourceBalance = sourceAccount.balance - amount;
         const newDestinationBalance = destinationAccount.balance + amount;
-
         await accountsCollection.updateOne(
             { account_number: fromAccountNumber },
             {
@@ -70,4 +65,4 @@ async function transferMoney(fromAccountNumber, toAccountNumber, amount) {
     }
 }
 
-transferMoney(101, 102, 1000);
+module.exports = transferMoney;
