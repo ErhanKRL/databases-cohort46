@@ -13,20 +13,13 @@ async function createCountriesDatabase() {
     try {
         await client.connect();
         console.log('Connected to MongoDB');
-
         const db = client.db(dbName);
-
-        // Drop collection if it exists
         await dropCollectionIfExists(db, 'countries');
-
-        // Read CSV file and insert its data into MongoDB
-        await insertPopulationData(db, 'population_pyramid_1950.csv');
-
+        await insertPopulationData(db, 'population_pyramid_1950-2022.csv');
         console.log('Data insertion complete');
     } catch (err) {
         console.error('Error:', err);
     } finally {
-        // Disconnect from MongoDB after all operations are completed
         await client.close();
         console.log('Disconnected from MongoDB');
     }
@@ -46,7 +39,6 @@ async function insertPopulationData(db, fileName) {
     const data = [];
 
     return new Promise((resolve, reject) => {
-        // Read the CSV file and push its data into the array
         fs.createReadStream(fileName)
             .pipe(csv())
             .on('data', (row) => {
@@ -60,7 +52,6 @@ async function insertPopulationData(db, fileName) {
             })
             .on('end', async () => {
                 try {
-                    // Insert data into MongoDB
                     await collection.insertMany(data);
                     console.log(`Inserted ${data.length} documents into collection: ${collectionName}`);
                     resolve();
